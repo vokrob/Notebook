@@ -1,5 +1,6 @@
 package com.vokrob.notebook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -52,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         mainAdapter.updateAdapter(myDbManager.getFromDb());
     }
 
-    public void onClickSave(View view) {
-        myDbManager.insertToDb("Test", "Test");
-        mainAdapter.updateAdapter(myDbManager.getFromDb());
+    public void onClickAdd(View view) {
+        Intent i = new Intent(MainActivity.this, EditActivity.class);
+        startActivity(i);
     }
 
     @Override

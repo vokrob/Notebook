@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Notebook</string>
+    <string name="text_epty">Заголовок или содержание не заполнено</string>
+    <string name="saved">Сохранено</string>
 </resources>
