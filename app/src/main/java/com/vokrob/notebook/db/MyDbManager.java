@@ -20,10 +20,11 @@ public class MyDbManager {
     public void openDb() {
         db = myDbHelper.getWritableDatabase();
     }
-    public void insertToDb(String title, String desc) {
+    public void insertToDb(String title, String desc, String uri) {
         ContentValues cv = new ContentValues();
         cv.put(MyConstants.TITLE, title);
         cv.put(MyConstants.DESC, desc);
+        cv.put(MyConstants.URI, uri);
         db.insert(MyConstants.TABLE_NAME, null, cv);
     }
     public List<String> getFromDb() {
