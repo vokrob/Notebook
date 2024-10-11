@@ -16,6 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vokrob.notebook.adapter.ListItem;
+import com.vokrob.notebook.db.MyConstants;
 import com.vokrob.notebook.db.MyDbManager;
 
 public class EditActivity extends AppCompatActivity {
@@ -27,6 +29,7 @@ public class EditActivity extends AppCompatActivity {
     private EditText edTitle, edDesc;
     private MyDbManager myDbManager;
     private String tempUri = "empty";
+    private boolean isEditState = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class EditActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit);
         init();
+        getMyIntents();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -65,6 +69,18 @@ public class EditActivity extends AppCompatActivity {
         fbAddImage = findViewById(R.id.fbAddImage);
         imageContainer = findViewById(R.id.imageContainer);
         myDbManager = new MyDbManager(this);
+    }
+
+    private void getMyIntents() {
+        Intent i = getIntent();
+        if (i != null) {
+            ListItem item = (ListItem) i.getSerializableExtra(MyConstants.LISTITEM_INTENT);
+            isEditState = i.getBooleanExtra(MyConstants.EDIT_STATE, true);
+            if (!isEditState) {
+                edTitle.setText(item.getTitle());
+                edDesc.setText(item.getDesc());
+            }
+        }
     }
 
     public void onClickSave(View view) {

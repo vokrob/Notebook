@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.vokrob.notebook.adapter.ListItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +29,19 @@ public class MyDbManager {
         cv.put(MyConstants.URI, uri);
         db.insert(MyConstants.TABLE_NAME, null, cv);
     }
-    public List<String> getFromDb() {
-        List<String> tempList = new ArrayList<>();
+    public List<ListItem> getFromDb() {
+        List<ListItem> tempList = new ArrayList<>();
         Cursor cursor = db.query(MyConstants.TABLE_NAME, null, null,
                 null, null, null, null);
         while (cursor.moveToNext()) {
+            ListItem item = new ListItem();
             String title = cursor.getString(cursor.getColumnIndex(MyConstants.TITLE));
-            tempList.add(title);
+            String desc = cursor.getString(cursor.getColumnIndex(MyConstants.DESC));
+            String uri = cursor.getString(cursor.getColumnIndex(MyConstants.URI));
+            item.setTitle(title);
+            item.setDesc(desc);
+            item.setUri(uri);
+            tempList.add(item);
         }
         cursor.close();
         return tempList;

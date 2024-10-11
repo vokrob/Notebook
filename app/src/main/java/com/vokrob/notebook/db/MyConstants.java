@@ -1,6 +1,8 @@
 package com.vokrob.notebook.db;
 
 public class MyConstants {
+    public static final String EDIT_STATE = "edit_state";
+    public static final String LISTITEM_INTENT = "list_item_intent";
     public static final String TABLE_NAME = "my_table";
     public static final String _ID = "_id";
     public static final String TITLE = "title";
