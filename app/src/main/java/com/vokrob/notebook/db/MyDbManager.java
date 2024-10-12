@@ -29,10 +29,11 @@ public class MyDbManager {
         cv.put(MyConstants.URI, uri);
         db.insert(MyConstants.TABLE_NAME, null, cv);
     }
-    public List<ListItem> getFromDb() {
+    public List<ListItem> getFromDb(String searchText) {
         List<ListItem> tempList = new ArrayList<>();
-        Cursor cursor = db.query(MyConstants.TABLE_NAME, null, null,
-                null, null, null, null);
+        String selection = MyConstants.TITLE + " like ?";
+        Cursor cursor = db.query(MyConstants.TABLE_NAME, null, selection,
+                new String[]{"%" + searchText + "%"}, null, null, null);
         while (cursor.moveToNext()) {
             ListItem item = new ListItem();
             String title = cursor.getString(cursor.getColumnIndex(MyConstants.TITLE));
