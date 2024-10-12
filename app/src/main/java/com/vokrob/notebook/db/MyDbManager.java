@@ -29,6 +29,12 @@ public class MyDbManager {
         cv.put(MyConstants.URI, uri);
         db.insert(MyConstants.TABLE_NAME, null, cv);
     }
+
+    public void delete(int id) {
+        String selection = MyConstants._ID + "=" + id;
+        db.delete(MyConstants.TABLE_NAME, selection, null);
+    }
+
     public List<ListItem> getFromDb(String searchText) {
         List<ListItem> tempList = new ArrayList<>();
         String selection = MyConstants.TITLE + " like ?";
@@ -39,9 +45,11 @@ public class MyDbManager {
             String title = cursor.getString(cursor.getColumnIndex(MyConstants.TITLE));
             String desc = cursor.getString(cursor.getColumnIndex(MyConstants.DESC));
             String uri = cursor.getString(cursor.getColumnIndex(MyConstants.URI));
+            int _id = cursor.getInt(cursor.getColumnIndex(MyConstants._ID));
             item.setTitle(title);
             item.setDesc(desc);
             item.setUri(uri);
+            item.setId(_id);
             tempList.add(item);
         }
         cursor.close();

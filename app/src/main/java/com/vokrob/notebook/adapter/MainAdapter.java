@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vokrob.notebook.EditActivity;
 import com.vokrob.notebook.R;
 import com.vokrob.notebook.db.MyConstants;
+import com.vokrob.notebook.db.MyDbManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             tvTitle = itemView.findViewById(R.id.tvTitle);
             itemView.setOnClickListener(this);
         }
+
         public void setData(String title) {
             tvTitle.setText(title);
         }
@@ -72,6 +74,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         mainArray.clear();
         mainArray.addAll(newList);
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int pos, MyDbManager dbManager) {
+        dbManager.delete(mainArray.get(pos).getId());
+        mainArray.remove(pos);
+        notifyItemRangeChanged(0, mainArray.size());
+        notifyItemRemoved(pos);
     }
 }
 
