@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vokrob.notebook.adapter.ListItem;
+import com.vokrob.notebook.db.AppExecuter;
 import com.vokrob.notebook.db.MyConstants;
 import com.vokrob.notebook.db.MyDbManager;
 
@@ -100,15 +101,20 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void onClickSave(View view) {
-        String title = edTitle.getText().toString();
-        String desc = edDesc.getText().toString();
+        final String title = edTitle.getText().toString();
+        final String desc = edDesc.getText().toString();
 
         if (title.equals("") || desc.equals("")) {
             Toast.makeText(this, R.string.text_epty, Toast.LENGTH_SHORT).show();
         } else {
 
             if (isEditState) {
-                myDbManager.insertToDb(title, desc, tempUri);
+                AppExecuter.getInstance().getSubIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        myDbManager.insertToDb(title, desc, tempUri);
+                    }
+                });
                 Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
             } else {
                 myDbManager.updateItem(title, desc, tempUri, item.getId());

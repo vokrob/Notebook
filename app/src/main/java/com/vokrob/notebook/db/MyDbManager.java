@@ -46,7 +46,7 @@ public class MyDbManager {
         db.delete(MyConstants.TABLE_NAME, selection, null);
     }
 
-    public List<ListItem> getFromDb(String searchText) {
+    public void getFromDb(String searchText, OnDataReceived onDataReceived) {
         List<ListItem> tempList = new ArrayList<>();
         String selection = MyConstants.TITLE + " like ?";
         Cursor cursor = db.query(MyConstants.TABLE_NAME, null, selection,
@@ -64,7 +64,7 @@ public class MyDbManager {
             tempList.add(item);
         }
         cursor.close();
-        return tempList;
+        onDataReceived.onReceived(tempList);
     }
 
     public void closeDb() {

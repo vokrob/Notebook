@@ -18,12 +18,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vokrob.notebook.adapter.ListItem;
 import com.vokrob.notebook.adapter.MainAdapter;
+import com.vokrob.notebook.db.AppExecuter;
 import com.vokrob.notebook.db.MyDbManager;
+import com.vokrob.notebook.db.OnDataReceived;
 
-import org.w3c.dom.Text;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnDataReceived {
     private MyDbManager myDbManager;
     private EditText edTitle, edDesc;
     private RecyclerView rcView;
@@ -55,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                mainAdapter.updateAdapter(myDbManager.getFromDb(newText));
+            public boolean onQueryTextChange(final String newText) {
+                readFromDb(newText);
                 return false;
             }
         });
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         myDbManager.openDb();
-        mainAdapter.updateAdapter(myDbManager.getFromDb(""));
+        readFromDb("");
     }
 
     public void onClickAdd(View view) {
@@ -103,6 +106,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 mainAdapter.removeItem(viewHolder.getAdapterPosition(), myDbManager);
+            }
+        });
+    }
+
+    private void readFromDb(final String text) {
+        AppExecuter.getInstance().getSubIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                myDbManager.getFromDb(text, MainActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void onReceived(List<ListItem> list) {
+        AppExecuter.getInstance().getMainIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mainAdapter.updateAdapter(list);
             }
         });
     }
