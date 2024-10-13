@@ -19,15 +19,26 @@ public class MyDbManager {
         this.context = context;
         myDbHelper = new MyDbHelper(context);
     }
+
     public void openDb() {
         db = myDbHelper.getWritableDatabase();
     }
+
     public void insertToDb(String title, String desc, String uri) {
         ContentValues cv = new ContentValues();
         cv.put(MyConstants.TITLE, title);
         cv.put(MyConstants.DESC, desc);
         cv.put(MyConstants.URI, uri);
         db.insert(MyConstants.TABLE_NAME, null, cv);
+    }
+
+    public void updateItem(String title, String desc, String uri, int id) {
+        String selection = MyConstants._ID + "=" + id;
+        ContentValues cv = new ContentValues();
+        cv.put(MyConstants.TITLE, title);
+        cv.put(MyConstants.DESC, desc);
+        cv.put(MyConstants.URI, uri);
+        db.update(MyConstants.TABLE_NAME, cv, selection, null);
     }
 
     public void delete(int id) {
@@ -55,6 +66,7 @@ public class MyDbManager {
         cursor.close();
         return tempList;
     }
+
     public void closeDb() {
         myDbHelper.close();
     }

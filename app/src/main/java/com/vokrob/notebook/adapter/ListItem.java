@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ListItem implements Serializable {
     private String title;
     private String desc;
-    private String uri;
+    private String uri = "empty";
     private int id = 0;
 
     public String getTitle() {
